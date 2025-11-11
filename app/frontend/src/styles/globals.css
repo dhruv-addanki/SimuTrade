@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-slate-50 text-slate-900;
+}
+
+.btn-primary {
+  @apply bg-brand-accent text-white font-semibold px-4 py-2 rounded-md hover:opacity-90 transition;
+}
