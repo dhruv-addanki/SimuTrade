@@ -9,6 +9,12 @@ interface Transaction {
   timestamp: string;
 }
 
+const typeBadge: Record<string, string> = {
+  CREDIT: 'bg-emerald-500/20 text-emerald-300',
+  DEBIT: 'bg-rose-500/20 text-rose-300',
+  TRADE: 'bg-sky-500/20 text-sky-200',
+};
+
 export default function TransactionsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -21,30 +27,30 @@ export default function TransactionsPage() {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg shadow border border-slate-100">
-      <div className="px-4 py-3 border-b border-slate-100">
-        <h3 className="text-lg font-semibold text-brand">Transaction History</h3>
+    <div className="space-y-6">
+      <div>
+        <p className="panel-heading">Transactions</p>
+        <h1 className="font-display text-3xl font-semibold text-white">Ledger</h1>
       </div>
-      <table className="min-w-full divide-y divide-slate-200">
-        <thead className="bg-slate-50">
-          <tr>
-            <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Type</th>
-            <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Amount</th>
-            <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Reason</th>
-            <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Timestamp</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-slate-100">
+      <div className="glass-panel overflow-hidden">
+        <div className="grid grid-cols-4 gap-4 border-b border-white/10 pb-3 text-xs uppercase tracking-wide text-white/60">
+          <span>Type</span>
+          <span>Amount</span>
+          <span>Reason</span>
+          <span>Date</span>
+        </div>
+        <div className="divide-y divide-white/5">
           {transactions.map((tx) => (
-            <tr key={tx.id}>
-              <td className="px-4 py-3 text-sm">{tx.type}</td>
-              <td className="px-4 py-3 text-sm">${Number(tx.amount).toFixed(2)}</td>
-              <td className="px-4 py-3 text-sm">{tx.reason}</td>
-              <td className="px-4 py-3 text-sm">{new Date(tx.timestamp).toLocaleString()}</td>
-            </tr>
+            <div key={tx.id} className="grid grid-cols-1 gap-4 py-3 text-sm text-white/80 md:grid-cols-4">
+              <span className={`pill ${typeBadge[tx.type] ?? 'bg-white/5 text-white/70'}`}>{tx.type}</span>
+              <span className="font-semibold text-white">${Number(tx.amount).toFixed(2)}</span>
+              <span>{tx.reason || '—'}</span>
+              <span className="text-white/60">{new Date(tx.timestamp).toLocaleString()}</span>
+            </div>
           ))}
-        </tbody>
-      </table>
+          {!transactions.length && <p className="py-6 text-sm text-white/50">No transactions yet.</p>}
+        </div>
+      </div>
     </div>
   );
 }

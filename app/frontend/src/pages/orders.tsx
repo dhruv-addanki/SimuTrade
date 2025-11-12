@@ -1,68 +1,73 @@
 import { useOrders } from '../hooks/useOrders';
 
+const statusStyles: Record<string, string> = {
+  FILLED: 'bg-emerald-500/20 text-emerald-300',
+  CANCELLED: 'bg-rose-500/20 text-rose-300',
+  OPEN: 'bg-amber-500/20 text-amber-200',
+  PARTIALLY_FILLED: 'bg-sky-500/20 text-sky-200',
+};
+
 export default function OrdersPage() {
   const { openOrders, history, cancelOrder } = useOrders();
 
-  const renderTable = (orders: any[]) => (
-    <table className="min-w-full divide-y divide-slate-200">
-      <thead className="bg-slate-50">
-        <tr>
-          <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Symbol</th>
-          <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Side</th>
-          <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Type</th>
-          <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Qty</th>
-          <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500">Status</th>
-          <th />
-        </tr>
-      </thead>
-      <tbody className="divide-y divide-slate-100">
-        {orders.map((order) => (
-          <tr key={order.id}>
-            <td className="px-4 py-3 text-sm font-semibold text-brand">{order.asset_detail?.symbol || order.asset}</td>
-            <td className="px-4 py-3 text-sm">{order.side}</td>
-            <td className="px-4 py-3 text-sm">{order.order_type}</td>
-            <td className="px-4 py-3 text-sm">{order.quantity}</td>
-            <td className="px-4 py-3 text-xs">
-              <span className={`rounded-full px-2 py-1 ${badgeColor(order.status)}`}>{order.status.replace('_', ' ')}</span>
-            </td>
-            <td className="px-4 py-3 text-right">
-              {['OPEN', 'PARTIALLY_FILLED'].includes(order.status) && (
-                <button className="text-sm text-red-500" onClick={() => cancelOrder(order.id)}>
-                  Cancel
-                </button>
-              )}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+  const renderList = (orders: any[], showActions?: boolean) => (
+    <div className="space-y-3">
+      {orders.map((order) => (
+        <div
+          key={order.id}
+          className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 transition hover:border-brand-accent/60"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-base font-semibold text-white">{order.asset_detail?.symbol || order.asset}</p>
+              <p className="text-xs text-white/60">
+                {order.side} · {order.order_type} · Qty {order.quantity}
+              </p>
+            </div>
+            <span className={`pill ${statusStyles[order.status] ?? 'bg-white/10 text-white/70'}`}>
+              {order.status.replace('_', ' ')}
+            </span>
+          </div>
+          <div className="mt-3 flex items-center justify-between text-xs text-white/60">
+            <p>Created {new Date(order.created_at).toLocaleString()}</p>
+            {showActions && ['OPEN', 'PARTIALLY_FILLED'].includes(order.status) && (
+              <button className="text-rose-300 hover:text-rose-200" onClick={() => cancelOrder(order.id)}>
+                Cancel
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
+      {!orders.length && <p className="text-sm text-white/50">No orders yet.</p>}
+    </div>
   );
 
   return (
     <div className="space-y-6">
-      <section className="bg-white rounded-lg shadow border border-slate-100">
-        <div className="px-4 py-3 border-b border-slate-100">
-          <h3 className="text-lg font-semibold text-brand">Open Orders</h3>
+      <div>
+        <p className="panel-heading">Orders</p>
+        <h1 className="font-display text-3xl font-semibold text-white">Execution queue</h1>
+      </div>
+      <section className="glass-panel space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-lg font-semibold text-white">Open Orders</p>
+            <p className="text-sm text-white/60">Live orders waiting for fills</p>
+          </div>
+          <span className="pill bg-white/10 text-white/70">{openOrders.length}</span>
         </div>
-        {renderTable(openOrders)}
+        {renderList(openOrders, true)}
       </section>
-      <section className="bg-white rounded-lg shadow border border-slate-100">
-        <div className="px-4 py-3 border-b border-slate-100">
-          <h3 className="text-lg font-semibold text-brand">Order History</h3>
+      <section className="glass-panel space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-lg font-semibold text-white">Order History</p>
+            <p className="text-sm text-white/60">Chronological audit trail</p>
+          </div>
+          <span className="pill bg-white/10 text-white/70">{history.length}</span>
         </div>
-        {renderTable(history)}
+        {renderList(history)}
       </section>
     </div>
   );
 }
-
-const badgeColor = (status: string) => {
-  switch (status) {
-    case 'FILLED':
-      return 'bg-emerald-100 text-emerald-700';
-    case 'CANCELLED':
-      return 'bg-rose-100 text-rose-700';
-    default:
-      return 'bg-amber-100 text-amber-700';
-  }
-};

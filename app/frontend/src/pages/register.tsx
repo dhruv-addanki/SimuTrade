@@ -17,36 +17,69 @@ export default function RegisterPage() {
     try {
       await register(username, email, password);
       router.replace('/dashboard');
-    } catch (err) {
+    } catch {
       setError('Unable to register');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-lg shadow px-6 py-8">
-        <h2 className="text-2xl font-semibold text-center text-brand mb-6">Create your account</h2>
-        {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <div>
-            <label className="text-sm text-slate-600">Username</label>
-            <input name="username" className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2" required />
+    <div className="glass-panel mx-auto max-w-4xl overflow-hidden border-white/10 bg-gradient-to-br from-slate-900/80 to-slate-900/60">
+      <div className="grid gap-8 md:grid-cols-2">
+        <div className="space-y-6 p-8">
+          <p className="panel-heading">Get started</p>
+          <h2 className="font-display text-3xl text-white">Create your workspace</h2>
+          <p className="text-sm text-white/60">
+            Paper trade equities with real-time quotes, order matching, and institutional-style risk reports.
+          </p>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
+            <p className="font-semibold text-white">What you get:</p>
+            <ul className="mt-2 space-y-1">
+              <li>• Portfolio heatmaps & analytics</li>
+              <li>• Streaming Alpha Vantage/Finnhub data</li>
+              <li>• Celery powered order automation</li>
+            </ul>
           </div>
-          <div>
-            <label className="text-sm text-slate-600">Email</label>
-            <input name="email" type="email" className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2" required />
-          </div>
-          <div>
-            <label className="text-sm text-slate-600">Password</label>
-            <input type="password" name="password" className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2" required />
-          </div>
-          <button className="btn-primary w-full" disabled={loading}>
-            {loading ? 'Creating...' : 'Register'}
-          </button>
-        </form>
-        <p className="mt-4 text-center text-sm text-slate-500">
-          Already have an account? <Link href="/login" className="text-brand-accent font-medium">Sign in</Link>
-        </p>
+        </div>
+        <div className="space-y-4 rounded-2xl bg-white/5 p-8">
+          {error && <p className="rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">{error}</p>}
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div>
+              <label className="text-xs uppercase tracking-wide text-white/60">Username</label>
+              <input
+                name="username"
+                className="mt-2 w-full rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white focus:border-brand-accent focus:outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="text-xs uppercase tracking-wide text-white/60">Email</label>
+              <input
+                name="email"
+                type="email"
+                className="mt-2 w-full rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white focus:border-brand-accent focus:outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="text-xs uppercase tracking-wide text-white/60">Password</label>
+              <input
+                type="password"
+                name="password"
+                className="mt-2 w-full rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white focus:border-brand-accent focus:outline-none"
+                required
+              />
+            </div>
+            <button className="btn-primary w-full" disabled={loading}>
+              {loading ? 'Creating...' : 'Create account'}
+            </button>
+          </form>
+          <p className="text-sm text-white/60">
+            Already have an account?{' '}
+            <Link href="/login" className="text-brand-accent font-semibold">
+              Sign in
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

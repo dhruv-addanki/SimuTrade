@@ -1,11 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-slate-50 text-slate-900;
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100 font-body antialiased;
+    background-image: linear-gradient(135deg, #020617 0%, #0f172a 60%, #020617 100%);
+    min-height: 100vh;
+  }
 }
 
-.btn-primary {
-  @apply bg-brand-accent text-white font-semibold px-4 py-2 rounded-md hover:opacity-90 transition;
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-brand-accent to-brand-glow px-4 py-2 text-sm font-semibold text-white shadow-glow transition hover:opacity-90;
+  }
+
+  .glass-panel {
+    @apply rounded-2xl border border-white/10 bg-white/5 p-6 shadow-card backdrop-blur-xl;
+  }
+
+  .panel-heading {
+    @apply text-sm uppercase tracking-[0.2em] text-white/60;
+  }
+
+  .pill {
+    @apply rounded-full border border-white/10 px-3 py-1 text-xs font-medium text-white/80;
+  }
 }

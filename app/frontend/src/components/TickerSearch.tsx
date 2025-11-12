@@ -14,33 +14,49 @@ const TickerSearch: React.FC<Props> = ({ onSelect }) => {
     const handler = setTimeout(async () => {
       const { data } = await api.get('/market/search', { params: { q: query } });
       setResults(data);
-    }, 300);
+    }, 250);
     return () => clearTimeout(handler);
   }, [query]);
 
   return (
-    <div className="bg-white rounded-lg p-4 shadow border border-slate-100">
-      <div className="flex items-center gap-3">
+    <div className="glass-panel space-y-4">
+      <div>
+        <p className="panel-heading">Ticker Scanner</p>
+        <p className="text-lg font-semibold text-white">Search any US equity</p>
+      </div>
+      <div className="relative">
         <input
           type="text"
-          placeholder="Search ticker"
+          placeholder="Type symbol or company name"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="flex-1 rounded-md border border-slate-200 px-3 py-2"
+          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-brand-accent focus:outline-none"
         />
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs uppercase tracking-wide text-white/40">
+          ⌘K
+        </span>
       </div>
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 max-h-80 overflow-y-auto">
+      <div className="max-h-72 space-y-2 overflow-y-auto pr-1">
         {results.map((asset) => (
           <button
             key={asset.id}
-            className="border rounded-md px-3 py-2 text-left hover:border-brand transition"
+            className="w-full rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-left transition hover:border-brand-accent hover:bg-white/10"
             onClick={() => onSelect(asset)}
           >
-            <p className="text-sm font-semibold text-brand">{asset.symbol}</p>
-            <p className="text-xs text-slate-500">{asset.name}</p>
-            <p className="text-sm text-brand-accent mt-1">${Number(asset.last_price).toFixed(2)}</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-white">{asset.symbol}</p>
+                <p className="text-xs text-white/60">{asset.name}</p>
+              </div>
+              <p className="text-base font-semibold text-brand-accent">
+                ${Number(asset.last_price).toFixed(2)}
+              </p>
+            </div>
           </button>
         ))}
+        {!results.length && (
+          <p className="text-sm text-white/50">Start typing to explore supported symbols.</p>
+        )}
       </div>
     </div>
   );
