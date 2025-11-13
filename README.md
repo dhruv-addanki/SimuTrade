@@ -1,6 +1,6 @@
 # SimuTrade
 
-A full-stack paper-trading simulator that combines a Django REST API, Celery-powered background jobs, and a modern Next.js dashboard. Users can register, place market or limit orders, monitor holdings, review trades/transactions, and see live market data pulled from Alpha Vantage or Finnhub.
+A full-stack paper-trading simulator that combines a Django REST API, Celery-powered background jobs, and a modern Next.js dashboard. Users can register, place market or limit orders, monitor holdings, review trades/transactions, and see live market data pulled from Alpha Vantage.
 
 ## Features
 
